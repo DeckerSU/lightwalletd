@@ -277,7 +277,7 @@ func (s *lwdStreamer) GetBlockRange(span *walletrpc.BlockRange, resp walletrpc.C
 		common.Metrics.TotalBlocksServedConter.Add(math.Abs(float64(span.Start.Height) - float64(span.End.Height)))
 	}()
 
-	go common.GetBlockRange(s.cache, blockChan, errChan, int(span.Start.Height), int(span.End.Height))
+	go common.GetBlockRange(s.cache, blockChan, errChan, int(span.Start.Height), int(span.End.Height), int(span.SpamFilterThreshold))
 
 	for {
 		select {
