@@ -76,21 +76,21 @@ func fetchAPIPrice(url string, resultPath []string) (float64, error) {
 }
 
 func fetchCoinbasePrice() (float64, error) {
-	return fetchAPIPrice("https://api.coinbase.com/v2/exchange-rates?currency=ZEC", []string{"data", "rates", "USD"})
+	return fetchAPIPrice("https://api.coinbase.com/v2/exchange-rates?currency=KMD", []string{"data", "rates", "USD"})
 
 }
 
 func fetchCoinCapPrice() (float64, error) {
-	return fetchAPIPrice("https://api.coincap.io/v2/rates/zcash", []string{"data", "rateUsd"})
+	return fetchAPIPrice("https://api.coincap.io/v2/rates/komodo", []string{"data", "rateUsd"})
 }
 
 func fetchBinancePrice() (float64, error) {
-	return fetchAPIPrice("https://api.binance.com/api/v3/avgPrice?symbol=ZECUSDC", []string{"price"})
+	return fetchAPIPrice("https://api.binance.com/api/v3/avgPrice?symbol=KMDUSDT", []string{"price"})
 }
 
 func fetchHistoricalCoinbasePrice(ts *time.Time) (float64, error) {
 	dt := ts.Format("2006-01-02") // ISO 8601
-	url := fmt.Sprintf("https://api.pro.coinbase.com/products/ZEC-USDC/candles?start=%sT00:00:00&end=%sT00:00:00&granularity=86400", dt, dt)
+	url := fmt.Sprintf("https://api.pro.coinbase.com/products/KMD-USDT/candles?start=%sT00:00:00&end=%sT00:00:00&granularity=86400", dt, dt)
 
 	resp, err := http.Get(url)
 	if err != nil {
