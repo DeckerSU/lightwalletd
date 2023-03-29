@@ -6,11 +6,13 @@
 package parser
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 
+	"github.com/DeckerSU/lightwalletd/parser/internal/bytestring"
+	"github.com/DeckerSU/lightwalletd/walletrpc"
 	"github.com/pkg/errors"
-	"github.com/adityapk00/lightwalletd/parser/internal/bytestring"
-	"github.com/adityapk00/lightwalletd/walletrpc"
 )
 
 type rawTransaction struct {
@@ -590,7 +592,32 @@ func (tx *Transaction) ParseFromSlice(data []byte) ([]byte, error) {
 
 	tx.fOverwintered = (header >> 31) == 1
 	if !tx.fOverwintered {
-		return nil, errors.New("fOverwinter flag must be set")
+
+		// some transactions in Komodo chain after sapling activation have version 1
+		// instead of 4, so we should have exception especially for such cases:
+		// txid: 6bd59c4a71c532b6fd57e167b5f2d1abf5f3c20d58bac1bc76c9aa2e744b0137
+
+		tx.version = header & 0x7FFFFFFF
+		if tx.version == 1 {
+			s, err = tx.ParseTransparent([]byte(s))
+			if err != nil {
+				return nil, err
+			}
+			if !s.Skip(4) {
+				return nil, errors.New("could not skip nLockTime")
+			}
+			txLen := len(data) - len(s)
+			tx.rawBytes = data[:txLen]
+
+			digest := sha256.Sum256(tx.rawBytes)
+			digest = sha256.Sum256(digest[:])
+			digest_bytes := []byte(digest[:])
+			fmt.Println("[exception] txid.", hex.EncodeToString(Reverse(digest_bytes)))
+
+			return []byte(s), nil
+		} else {
+			return nil, errors.New("fOverwinter flag must be set")
+		}
 	}
 	tx.version = header & 0x7FFFFFFF
 	if tx.version < 4 {
