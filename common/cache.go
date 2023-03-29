@@ -15,7 +15,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/adityapk00/lightwalletd/walletrpc"
+	"github.com/DeckerSU/lightwalletd/walletrpc"
 	"github.com/golang/protobuf/proto"
 )
 

@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/adityapk00/lightwalletd/walletrpc"
+	"github.com/DeckerSU/lightwalletd/walletrpc"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )

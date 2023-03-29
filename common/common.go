@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/adityapk00/lightwalletd/parser"
-	"github.com/adityapk00/lightwalletd/walletrpc"
+	"github.com/DeckerSU/lightwalletd/parser"
+	"github.com/DeckerSU/lightwalletd/walletrpc"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/proto"
